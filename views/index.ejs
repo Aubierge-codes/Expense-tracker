@@ -1,150 +1,386 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Expense Tracker</title>
-  <style>
-    :root {
-      --primary: #2563eb;
-      --danger: #dc2626;
-      --light: #f3f4f6;
-      --gray: #6b7280;
-    }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--light);
-      margin: 0;
-      padding: 2rem;
-      color: #111827;
-      line-height: 1.5;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    h1 {
-      text-align: center;
-      color: var(--primary);
-      margin-bottom: 2rem;
-    }
-    form {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr auto;
-      gap: 0.75rem;
-      margin-bottom: 2rem;
-      background: white;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
-    input, select, button {
-      padding: 0.75rem;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-    button {
-      background: var(--primary);
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: 500;
-    }
-    button:hover { background: #1d4ed8; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
-    th, td {
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid #e5e7eb;
-    }
-    th {
-      background: #f9fafb;
-      font-weight: 600;
-      color: var(--gray);
-    }
-    .amount { text-align: right; font-weight: 500; }
-    .delete-btn {
-      background: none;
-      border: none;
-      color: var(--danger);
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 0 0.5rem;
-    }
-    .total {
-      font-size: 1.5rem;
-      font-weight: 700;
-      text-align: right;
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expense Tracker</title>
+
+<!-- GOOGLE FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#2563eb;
+  --danger:#dc2626;
+  --light:#f3f4f6;
+  --gray:#6b7280;
+  --bg-dark:#111827;
+  --bg-dark-table:#1f2937;
+}
+
+/* GLOBAL */
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--light);
+  margin:0;
+  padding:2rem;
+  color:#111827;
+  line-height:1.5;
+  transition: background 0.3s, color 0.3s;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+}
+
+h1{
+  text-align:center;
+  color:var(--primary);
+  margin-bottom:2rem;
+}
+
+/* CONTROLS */
+.controls{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  margin-bottom:1rem;
+  gap:0.5rem;
+}
+
+.currency-select-wrapper{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  font-weight:500;
+}
+
+.currency-select-wrapper select{
+  padding:0.5rem 0.75rem;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  background:white;
+  cursor:pointer;
+  font-weight:500;
+  box-shadow:0 1px 5px rgba(0,0,0,0.1);
+}
+
+button{
+  padding:0.5rem 1rem;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:500;
+  transition: background 0.2s;
+}
+
+button:hover{ opacity:0.9; }
+
+button.dark-toggle{ background:#1d4ed8; color:white; }
+
+/* FORM */
+form{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr auto;
+  gap:.75rem;
+  margin-bottom:2rem;
+  background:white;
+  padding:1.5rem;
+  border-radius:12px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+input, select{
+  padding:.75rem;
+  border:1px solid #d1d5db;
+  border-radius:8px;
+  font-size:1rem;
+}
+
+form button{
+  background:var(--primary);
+  color:white;
+}
+
+form button:hover{ background:#1e40af; }
+
+/* SEARCH */
+#searchInput{
+  width:100%;
+  padding:.7rem;
+  margin-bottom:1rem;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  font-size:1rem;
+}
+
+/* TABLE */
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+thead th{
+  padding:1rem;
+  background:#f9fafb;
+  font-weight:600;
+  color:var(--gray);
+  position: sticky;
+  top:0;
+}
+
+tbody td{
+  padding:0.75rem 1rem;
+  border-bottom:1px solid #e5e7eb;
+}
+
+tbody tr{
+  transition: all 0.3s ease;
+  opacity:1;
+}
+
+tbody tr.removing{
+  opacity:0;
+  transform:translateX(-20px);
+}
+
+.amount{
+  text-align:right;
+  font-weight:500;
+}
+
+.delete-btn{
+  background:none;
+  border:none;
+  color:var(--danger);
+  font-size:1.2rem;
+  cursor:pointer;
+  padding:0 .5rem;
+  transition: transform 0.2s;
+}
+
+.delete-btn:hover{ transform:scale(1.2); }
+
+/* CATEGORY BADGES */
+.category {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  margin: 2px 2px 2px 0; /* spacing between badges */
+  transition: transform 0.2s, opacity 0.2s;
+}
+.category:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* COLORS */
+.food-drinks { background: #f9a005; }
+.transport { background: #3b82f6; }
+.utilities { background: #10b981; }
+.shopping { background: #8b5cf6; }
+.entertainment { background: #810241; }
+.health { background: #ef4444; }
+.other { background: #3e495f; }
+
+/* DARK MODE COLORS */
+.dark .food-drinks { background: #b45309; }
+.dark .transport { background: #0891b2; }
+.dark .utilities { background: #4f46e5; }
+.dark .shopping { background: #be185d; }
+.dark .entertainment { background: #7c3aed; }
+.dark .health { background: #059669; }
+.dark .other { background: #919fb1; }
+
+
+
+/* TOTAL */
+.total{
+  font-size:1.5rem;
+  font-weight:700;
+  text-align:right;
+  margin-top:1.5rem;
+  padding:1rem;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+/* DARK MODE */
+.dark{
+  background:var(--bg-dark);
+  color:#f9fafb;
+}
+
+.dark table,
+.dark form,
+.dark .total,
+.dark #searchInput{
+  background:var(--bg-dark-table);
+  color:white;
+}
+
+.dark th{ background:var(--bg-dark); }
+.dark tr:hover{ background:#374151; }
+
+
+/* MOBILE */
+@media (max-width:700px){
+  body{ padding:1rem; }
+  form{ grid-template-columns:1fr; }
+  .controls{ flex-direction:column; gap:.5rem; }
+  table{ font-size:0.9rem; display:block; overflow-x:auto; }
+  th:nth-child(1), td:nth-child(1){ display:none; }
+}
+
+
+tbody tr.removing{ opacity:0; transform:translateX(-20px); }
+
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>Expense Tracker</h1>
+<div class="container">
 
-    <form action="/add" method="POST">
-      <input type="text" name="description" placeholder="What did you buy?" required autofocus>
-      <input type="number" name="amount" step="0.01" min="0.01" placeholder="Amount" required>
-      <select name="category">
-        <option value="">Category</option>
-        <option>Food & Drinks</option>
-        <option>Transport</option>
-        <option>Utilities</option>
-        <option>Shopping</option>
-        <option>Entertainment</option>
-        <option>Health</option>
-        <option>Other</option>
-      </select>
-      <button type="submit">Add Expense</button>
-    </form>
+<h1>Expense Tracker</h1>
 
-    <% if (expenses.length === 0) { %>
-      <p style="text-align:center; color: var(--gray);">No expenses yet. Add your first one above.</p>
-    <% } else { %>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th class="amount">Amount</th>
-            <th style="width:60px;"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% expenses.forEach(exp => { %>
-            <tr>
-              <td><%= exp.date %></td>
-              <td><%= exp.description %></td>
-              <td><%= exp.category %></td>
-              <td class="amount"><%= Number(exp.amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) %></td>
-              <td>
-                <form action="/delete/<%= exp.id %>" method="POST" style="margin:0;">
-                  <button type="submit" class="delete-btn">×</button>
-                </form>
-              </td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-
-      <div class="total">
-        Total spent: <%= total %> RWF
-      </div>
-    <% } %>
+<div class="controls">
+  <div class="currency-select-wrapper">
+    <span>Currency:</span>
+    <select id="currencySelect">
+      <option value="RWF">🇷🇼 RWF</option>
+      <option value="USD">🇺🇸 USD</option>
+      <option value="EUR">🇪🇺 EUR</option>
+      <option value="GBP">🇬🇧 GBP</option>
+      <option value="KES">🇰🇪 KES</option>
+    </select>
   </div>
+  <button class="dark-toggle" onclick="toggleDark()">🌙 Dark Mode</button>
+</div>
+
+<form action="/add" method="POST">
+  <input type="text" name="description" placeholder="What did you buy?" required autofocus>
+  <input type="number" name="amount" step="0.01" min="0.01" placeholder="Amount" required>
+  <select name="category">
+    <option value="">Category</option>
+    <option>Food & Drinks</option>
+    <option>Transport</option>
+    <option>Utilities</option>
+    <option>Shopping</option>
+    <option>Entertainment</option>
+    <option>Health</option>
+    <option>Other</option>
+  </select>
+  <button type="submit">Add Expense</button>
+</form>
+
+<% if (expenses.length > 0) { %>
+<input id="searchInput" type="text" placeholder="🔍 Search expenses...">
+
+<table>
+<thead>
+<tr>
+  <th>Date</th>
+  <th>Description</th>
+  <th>Category</th>
+  <th class="amount">Amount</th>
+  <th style="width:60px;"></th>
+</tr>
+</thead>
+<tbody>
+<% expenses.forEach(exp => { %>
+<tr>
+  <td><%= exp.date %></td>
+  <td><%= exp.description %></td>
+
+  <td>
+<span class="category <%= exp.category.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-') %>">
+  <%= exp.category %>
+</span>
+  </td>
+  <td class="amount"><span class="amount-value"><%= Number(exp.amount).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) %></span></td>
+  <td>
+
+    <button class="delete-btn" type="button" onclick="deleteRow(this, <%= exp.id %>)">×</button>
+
+  </td>
+</tr>
+<% }) %>
+</tbody>
+</table>
+
+<div class="total">
+  Total spent: <span id="totalValue"><%= total %></span>
+</div>
+<% } %>
+
+</div>
+
+<script>
+// DARK MODE
+function toggleDark(){
+  document.body.classList.toggle("dark")
+  localStorage.setItem("darkMode", document.body.classList.contains("dark"))
+}
+if(localStorage.getItem("darkMode")==="true"){ document.body.classList.add("dark") }
+
+// CURRENCY
+const currencySelect = document.getElementById("currencySelect")
+if(localStorage.getItem("currency")) currencySelect.value = localStorage.getItem("currency")
+currencySelect.addEventListener("change", ()=> localStorage.setItem("currency", currencySelect.value))
+const currency = localStorage.getItem("currency") || "RWF"
+
+// APPLY CURRENCY
+document.querySelectorAll(".amount-value").forEach(el=> el.textContent = currency+" "+el.textContent)
+const totalValue = document.getElementById("totalValue")
+if(totalValue) totalValue.textContent = currency+" "+totalValue.textContent
+
+// SEARCH
+const searchInput = document.getElementById("searchInput")
+if(searchInput){
+  searchInput.addEventListener("keyup", function(){
+    const value = this.value.toLowerCase()
+    document.querySelectorAll("tbody tr").forEach(row => {
+      row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none"
+    })
+  })
+}
+
+
+function deleteRow(btn, id) {
+  const row = btn.closest('tr');
+  row.style.transition = "opacity 0.5s";
+  row.style.opacity = 0;
+
+  setTimeout(() => {
+    row.remove();
+
+    // Call server to delete the expense
+    fetch(`/delete/${id}`, { method: 'POST' })
+      .catch(err => console.error('Failed to delete:', err));
+
+    // Update total
+    const amounts = document.querySelectorAll('.amount-value');
+    let total = 0;
+    amounts.forEach(el => {
+      const num = parseFloat(el.textContent.replace(/[^\d.-]/g, ''));
+      total += isNaN(num) ? 0 : num;
+    });
+    document.getElementById('totalValue').textContent = 
+      (localStorage.getItem('currency') || 'RWF') + " " + total.toFixed(2);
+
+  }, 500); // fade duration
+}
+</script>
+
 </body>
 </html>
