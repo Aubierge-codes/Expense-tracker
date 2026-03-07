@@ -46,19 +46,24 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }))
 
 app.get('/', async (req, res) => {
+  try {
 
-  const expenses = await Expense.find().sort({_id:-1});
+    if (mongoose.connection.readyState !== 1) {
+      await mongoose.connect(process.env.MONGO_URI);
+      console.log("Connected to MongoDB via route");
+    }
 
-  const total = expenses.reduce(
-    (sum, exp) => sum + exp.amount,
-    0
-  );
+    const expenses = await Expense.find().sort({_id:-1});
+    const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
 
-  res.render('index', {
-    expenses,
-    total: total.toFixed(2)
-  });
-
+    res.render('index', {
+      expenses,
+      total: total.toFixed(2)
+    });
+  } catch (err) {
+    console.error("Database Error:", err);
+    res.status(500).send("Database connection failed. Check your password and MONGO_URI.");
+  }
 });
 
 
