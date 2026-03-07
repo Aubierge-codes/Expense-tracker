@@ -1,3 +1,14 @@
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+const port = process.env.PORT || 3000;
+
+
+mongoose.connect(process.env.MONGO_URI)
+.then(()=> console.log("Connected to MongoDB"))
+.catch(err => console.error("MongoDB connection error:", err));
+
 app.get('/', async (req, res) => {
   try {
 
@@ -17,17 +28,6 @@ app.get('/', async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const app = express();
-const port = process.env.PORT || 3000;
-
-
-mongoose.connect(process.env.MONGO_URI)
-.then(()=> console.log("Connected to MongoDB"))
-.catch(err => console.error("MongoDB connection error:", err));
 
 const expenseSchema = new mongoose.Schema({
   description: String,
