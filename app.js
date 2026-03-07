@@ -1,3 +1,23 @@
+app.get('/', async (req, res) => {
+  try {
+
+    if (mongoose.connection.readyState !== 1) {
+       return res.status(500).send("Database connecting... please refresh in a moment.");
+    }
+
+    const expenses = await Expense.find().sort({_id:-1});
+    const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+
+    res.render('index', {
+      expenses,
+      total: total.toFixed(2)
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');

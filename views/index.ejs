@@ -310,7 +310,7 @@ tbody tr.removing{ opacity:0; transform:translateX(-20px); }
   <td class="amount"><span class="amount-value"><%= Number(exp.amount).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) %></span></td>
   <td>
 
-    <button class="delete-btn" type="button" onclick="deleteRow(this, <%= exp.id %>)">×</button>
+  <button class="delete-btn" type="button" onclick="deleteRow(this, '<%= exp._id %>')">×</button>
 
   </td>
 </tr>
